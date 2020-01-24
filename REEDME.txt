@@ -1,0 +1,415 @@
+Desarrolador    : German Figueroa
+Fecha           : 24/01/2020
+API Verssion    : 1.0
+API Name        : Educacion-Test-Backend
+Lenguaje        : Python 3.7.6
+Estructura      :
+    >.vscode    => "Configuraciones del entorno de Desarrolador Visual Studio Code"
+    >env        => "Entorno aislado con los paquetes utilizados"
+    >app.py     => "Archivo Fuente API"
+    >DER.PNG    => "Imagen de estructura BBDD"
+    >script.sql => "Script para montar base de datos 'educdb' en MySQL"
+    >REEDME.txt => "Archivo Leeme con caracter informativo sobre la arquitectura y el uso de la API"
+
+########## API Educacion-Test-Backend v.1.0 ##########
+LA API se mantiene en escucha en localhost puerto 4000
+    http://localhost:4000/
+
+>Imports
+
+    import pymysql      => "Libreria de Conector MySQL"
+    import json         => "Libreria para la manipulacion de String tioi JSON"
+    import ast          => "Libreria de apoyo para manipular sintaxis abstracta"
+    from flask 
+        import  Flask   => "Libreria base del Framework Flask"
+                jsonify => "Libreria de funcion JSON, parte del Framework Flask"
+                request => "Libreria para manipulacion de peticiones de cliente, parte del Framework Flask"
+>Funciones
+
+    addCurso()
+        
+        Funcion que permite la insercion de un nuevo curso a la BBDD 
+
+        Methods = POST
+
+        requisito : request de tipo POST cun request de la siguiente estructura
+        	{
+                "tusuario":1,       => Indica el tipo de usuario que realiza la peticion
+                "nombre":"curso 5", => Indica el nombre del nuevo curso
+                "prerrequisito":4   => Indica si existe un curso de prerrequisito y cual es
+            }
+
+        return JSON
+            {
+                "message": "ok"     => Indica si la funcion se ejecuto correctamente
+            }
+
+        URL de acceso
+            http://localhost:4000/addCurso
+
+    getCursos()
+
+        Funcion que permite la consulta a la BBDD de todos los cursos existentes
+
+        Methods = GET
+
+        requisito : ""
+
+        return JSON con la data solicitada
+            [
+                [
+                    1,             => Id de Curso
+                    0,             => Id de Curso prerrequisito
+                    "Curso 1"      => Nombre de Curso
+                ],
+                [
+                    2,
+                    1,
+                    "curso 2"
+                ]
+            ]
+
+        URL de acceso
+                http://localhost:4000/getCurso
+    
+    getCursos()
+
+        Funcion que permite la consulta a la BBDD de un Curso existente
+
+        Methods = GET
+
+        requisito : id de curso a buscar por URL
+            localhost:4000/getCurso/<id_curso>
+
+        return JSON con la data solicitada
+            [
+                [
+                    1,             => Id de Curso
+                    0,             => Id de Curso prerrequisito
+                    "Curso 1"      => Nombre de Curso
+                ]
+            ]
+            
+        URL de acceso
+                http://localhost:4000/getCurso/1 
+    
+    editCurso()
+        
+        Funcion que permite editar un  curso de la BBDD 
+
+        Methods = PUT
+
+        requisito : request de tipo PUT  cun request de la siguiente estructura
+        	{
+                "tusuario":1,       => Indica el tipo de usuario que realiza la peticion
+                "id":1,             => Indica id de curso que sera editado
+                "nombre":"curso 5", => Indica el nombre actualizado del curso
+                "prerrequisito":4   => Indica prerrequisito actualizado
+            }
+
+        return JSON
+            {
+                "message": "ok"     => Indica si la funcion se ejecuto correctamente
+            }
+
+        URL de acceso
+            http://localhost:4000/editCurso
+
+    delCurso()
+        
+        Funcion que permite eliminar un  curso de la BBDD 
+
+        Methods = DELETE
+
+        requisito : id de curso a eliminar y tpo de usuario que hace la solicitud por URL
+            localhost:4000/delCurso/<id_curso>/<tipo_usuario>
+
+        return JSON
+            {
+                "message": "ok"     => Indica si la funcion se ejecuto correctamente
+            }
+
+        URL de acceso
+            http://localhost:4000/delCurso/1/1
+    
+    addLeccion()
+        
+        Funcion que permite la insercion de un nuevo curso a la BBDD 
+
+        Methods = POST
+
+        requisito : request de tipo POST cun request de la siguiente estructura
+        	{
+                "tusuario":1,           => Indica el tipo de usuario que realiza la peticion
+                "id_curso":2,           => Indica el curso asociado a la nueva leccion
+                "prerrequisito":3,      => Indica id de leccion prerrequisito
+                "nombre":"Leccion 2-2", => Indica Nombre Nueva Leccion
+                "puntaje":60            => Indica puntaje de aprobacion nueva leccion
+            }
+
+        return JSON
+            {
+                "message": "ok"     => Indica si la funcion se ejecuto correctamente
+            }
+
+        URL de acceso
+            http://localhost:4000/addLeccion
+
+    getLecciones()
+
+        Funcion que permite la consulta a la BBDD de todas las lecciones existentes
+
+        Methods = GET
+
+        requisito : ""
+
+        return JSON con la data solicitada
+            [
+                [
+                    1,                  => Id de Liccion
+                    1,                  => Id Curso asociado
+                    0,                  => Id Leccion prerrequisito
+                    "Leccion 1-1",      => nombre Leccion
+                    60.0                => Puntaje de aprobacion
+                ],
+                [
+                    2,
+                    1,
+                    1,
+                    "Leccion 2-1",
+                    60.0
+                ]
+            ]
+
+        URL de acceso
+                http://localhost:4000/getLeccion
+    
+    getLeccion()
+
+        Funcion que permite la consulta a la BBDD de una lecion existente
+
+        Methods = GET
+
+        requisito : id de leccion a buscar por URL
+            localhost:4000/getLeccion/<id_leccion>
+
+        return JSON con la data solicitada
+            [
+                [
+                    1,                  => Id de Liccion
+                    1,                  => Id Curso asociado
+                    0,                  => Id Leccion prerrequisito
+                    "Leccion 1-1",      => nombre Leccion
+                    60.0                => Puntaje de aprobacion
+                ]
+            ]
+            
+        URL de acceso
+                http://localhost:4000/getLecion/1 
+    
+    editLeccion()
+        
+        Funcion que permite editar una leccion de la BBDD 
+
+        Methods = PUT
+
+        requisito : request de tipo PUT  cun request de la siguiente estructura
+        	{
+                "tusuario":1,       => Indica el tipo de usuario que realiza la peticion
+                "id":1,             => Indica id de leccion que sera editado
+                "id_curso":2,       => Indica Curso al que pertenece leccion editado
+                "prerrequisito":4,  => Indica prerrequisito actualizado
+                "nombre":"Leccion 2-2", => Indica el nombre editado de Leccion 
+                "puntaje":60        => Indica Puntaje de aprobacion editado
+            }
+
+        return JSON
+            {
+                "message": "ok"     => Indica si la funcion se ejecuto correctamente
+            }
+
+        URL de acceso
+            http://localhost:4000/editLeccion
+
+    delLecion()
+        
+        Funcion que permite eliminar una leccion de la BBDD 
+
+        Methods = DELETE
+
+        requisito : id de leccion a eliminar y tpo de usuario que hace la solicitud por URL
+            localhost:4000/delLeccion/<id_Leccion>/<tipo_usuario>
+
+        return JSON
+            {
+                "message": "ok"     => Indica si la funcion se ejecuto correctamente
+            }
+
+        URL de acceso
+            http://localhost:4000/delLeccion/1/1
+    
+    addPregunta()
+        
+        Funcion que permite la insercion de una nueva pregunta a la BBDD 
+
+        Methods = POST
+
+        requisito : request de tipo POST cun request de la siguiente estructura
+        	{
+                "tusuario":1,               => Indica el tipo de usuario que realiza la peticion
+                "id_leccion":1,             => Indica id leccion asociada 
+                "tipo":1,                   => Indica id tipo de leccion 
+                "pregunta":"pregunta...",   => Indica pregunta
+                "respuesta":1,              => Indica Respuesta
+                "puntaje": 60               => Indica puntaje 
+            }
+
+        return JSON
+            {
+                "message": "ok"     => Indica si la funcion se ejecuto correctamente
+            }
+
+        URL de acceso
+            http://localhost:4000/addPregunta
+
+    getPreguntaes()
+
+        Funcion que permite la consulta a la BBDD de todas las Preguntaes existentes
+
+        Methods = GET
+
+        requisito : ""
+
+        return JSON con la data solicitada
+            [
+                [
+                    "id":1,                     => Indica id de Pregunta
+                    "id_leccion":1,             => Indica id leccion asociada 
+                    "tipo":1,                   => Indica id tipo de leccion 
+                    "pregunta":"pregunta...",   => Indica pregunta
+                    "respuesta":1,              => Indica Respuesta
+                    "puntaje": 60               => Indica puntaje 
+                ],
+                [         
+                    "id":2,
+                    "id_leccion":1,
+                    "tipo":1,
+                    "pregunta":"pregunta...",
+                    "respuesta":1,
+                    "puntaje": 60
+                ]
+            ]
+
+        URL de acceso
+                http://localhost:4000/getPregunta
+    
+    getPregunta()
+
+        Funcion que permite la consulta a la BBDD de una pregunta existente
+
+        Methods = GET
+
+        requisito : id de Pregunta a buscar por URL
+            localhost:4000/getPregunta/<id_Pregunta>
+
+        return JSON con la data solicitada
+            [
+                [
+                    "id":1,                     => Indica id de Pregunta
+                    "id_leccion":1,             => Indica id leccion asociada 
+                    "tipo":1,                   => Indica id tipo de leccion 
+                    "pregunta":"pregunta...",   => Indica pregunta
+                    "respuesta":1,              => Indica Respuesta
+                    "puntaje": 60               => Indica puntaje 
+                ]
+            ]
+            
+        URL de acceso
+                http://localhost:4000/getPregunta/1 
+    
+    editPregunta()
+        
+        Funcion que permite editar una Pregunta de la BBDD 
+
+        Methods = PUT
+
+        requisito : request de tipo PUT  cun request de la siguiente estructura
+        	{
+                "tusuario":1,               => Indica el tipo de usuario que realiza la peticion
+                "id":1,                     => Indica id de Pregunta que sera editado
+                "id_leccion":1,             => Indica id leccion asociada 
+                "tipo":1,                   => Indica id tipo de leccion 
+                "pregunta":"pregunta...",   => Indica pregunta
+                "respuesta":1,              => Indica Respuesta
+                "puntaje": 60               => Indica puntaje 
+            }
+
+        return JSON
+            {
+                "message": "ok"     => Indica si la funcion se ejecuto correctamente
+            }
+
+        URL de acceso
+            http://localhost:4000/editPregunta
+
+    delPregunta()
+        
+        Funcion que permite eliminar una Pregunta de la BBDD 
+
+        Methods = DELETE
+
+        requisito : id de Pregunta a eliminar y tpo de usuario que hace la solicitud por URL
+            localhost:4000/delPregunta/<id_Pregunta>/<tipo_usuario>
+
+        return JSON
+            {
+                "message": "ok"     => Indica si la funcion se ejecuto correctamente
+            }
+
+        URL de acceso
+            http://localhost:4000/delPregunta/1/1
+
+    getTipoPregunta()
+
+        Funcion que permite la consulta a la BBDD de todos los tipos de Preguntaes existentes
+
+        Methods = GET
+
+        requisito : ""
+
+        return JSON con la data solicitada
+            [
+                [
+                    "id":1,                  => Indica id de tipo Pregunta
+                    "descripcion":"tipo",    => Indica descripcion de tipo
+                ],
+                [        
+                    "id":2,
+                    "descripcion":"tipo", 
+                ]
+            ]
+
+        URL de acceso
+                http://localhost:4000/getTipoPregunta
+    
+    getTipoPregunta()
+
+        Funcion que permite la consulta a la BBDD de un tipo pregunta existente
+
+        Methods = GET
+
+        requisito : id de Pregunta a buscar por URL
+            localhost:4000/getTipoPregunta/<id_Tipo>
+
+        return JSON con la data solicitada
+            [
+                [
+                    "id":1,                             => Indica id de Tipo Pregunta
+                    "descripcion":"descripcion...",     => Indica descripcion
+
+                ]
+            ]
+            
+        URL de acceso
+                http://localhost:4000/getTipoPregunta/1 
+    
